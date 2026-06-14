@@ -2,6 +2,11 @@ package org.firstinspires.ftc.teamcode.Teleop;
 
 import android.util.Size;
 
+import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.PoseVelocity2d;
+import com.acmerobotics.roadrunner.ProfileAccelConstraint;
+import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -13,11 +18,21 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.auto.MecanumDrive;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagLibrary;
 import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.InstantAction;
+import com.acmerobotics.roadrunner.Pose2d   ;
+import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.SleepAction;
+import com.acmerobotics.roadrunner.Vector2d;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
 
@@ -105,21 +120,61 @@ public class AprilTagTest extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-
         initAprilTag();
-
-        // Wait for the DS start button to be touched.
         telemetry.addData("DS preview on/off", "3 dots, Camera Stream");
         telemetry.addData(">", "Touch START to start OpMode");
         telemetry.update();
+        /*MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
 
+
+
+        // Wait for the DS start button to be touched.
+
+        Action myPath = drive.actionBuilder(drive.localizer.getPose())
+                .turn(Math.toRadians(360))
+                .build();
+        boolean pathRunning = true;
+        TelemetryPacket packet = new TelemetryPacket();*/
         waitForStart();
 
         while (opModeIsActive()) {
 
+
+            // Turn up to 180 degrees, but stop early if tag ID 5 is seen
+            /*while (opModeIsActive() && pathRunning) {
+                pathRunning = myPath.run(packet);
+                List<AprilTagDetection> detections = aprilTag.getDetections();
+                List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+
+                // Step through the list of detections and display info for each one.
+                for (AprilTagDetection detection : currentDetections) {
+                    if (detection.metadata != null) {
+                        // Only use tags that don't have Obelisk in them
+                        if (detection.id == 20) {
+                            telemetry.addLine(String.format("XYZ %6.1f %6.1f %6.1f  (inch)",
+                                    detection.robotPose.getPosition().x,
+                                    detection.robotPose.getPosition().y,
+                                    detection.robotPose.getPosition().z));
+                            telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)",
+                                    detection.robotPose.getOrientation().getPitch(AngleUnit.DEGREES),
+                                    detection.robotPose.getOrientation().getRoll(AngleUnit.DEGREES),
+                                    detection.robotPose.getOrientation().getYaw(AngleUnit.DEGREES)));
+                            drive.setDrivePowers(new PoseVelocity2d(new Vector2d(0, 0), 0));
+                            break;
+
+                        }
+                    }
+
+                }
+*/
+                ;
+
+
+
+                telemetry.update();
+
             telemetryAprilTag();
             // Push telemetry to the Driver Station.
-            telemetry.update();
 
             // Save CPU resources; can resume streaming when needed.
             if (gamepad1.dpad_down) {
@@ -233,6 +288,17 @@ public class AprilTagTest extends LinearOpMode {
         telemetry.addLine("PRY = Pitch, Roll & Yaw (XYZ Rotation)");
 
     }
+
+
+
+
+
+
+    // Turn up to 180 degrees, but stop early if tag ID 5 is seen
+
+
+
+
 
 
 }   // end class
